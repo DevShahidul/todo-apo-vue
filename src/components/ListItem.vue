@@ -6,12 +6,24 @@
                 type: Object
             },
         },
+        data() {
+            return {
+                todoTitle: this.todo.title,
+            }
+        },
         methods: {
             handleDelete(){
                 useTodoStore().deleteTodo(this.todo.id);
             },
             handleStatus(){
                 useTodoStore().toggleStatus(this.todo.id);
+            },
+            handleEdit(){
+                useTodoStore().editTodo(this.todo.id);
+            },
+            updateTodo(event){
+                event.preventDefault();
+                useTodoStore().updateTodo(this.todo.id, this.todoTitle);
             }
         },
         computed: {
@@ -21,7 +33,14 @@
 </script>
 <template>
     <li class="w-full p-4 ring-1 ring-gray-200 flex justify-between items-center hover:shadow-lg transition shadow-gray-800">
-        {{ todo.title }}
+        <template v-if="todo.allowEdit">
+            <form @submit="(e) => updateTodo(e)">
+                <input class="ring-1 ring-text-gray-300 text-gray-500 placeholder:text-gray-400" type="text" name="todoTitle" v-model="todoTitle">
+            </form>
+        </template>
+        <template v-else>
+            {{ todo.title }}
+        </template>
         <div class="flex items-cener space-x-4">
             <span :class="['font-bold', todo.completed ? 'text-green-600' : 'text-red-500']">{{ todo.completed ? 'Completed' : 'Pending' }}</span>
             <button @click="handleStatus()" class="text-green-400 hover:text-green-600">
@@ -36,6 +55,11 @@
                     </svg>
 
                 </template>
+            </button>
+            <button class="text-gray-500 disabled:text-gray-300" @click="handleEdit()" :disabled="todo.completed">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                </svg>
             </button>
             <button class="text-red-500 hover:text-red-400" @click="handleDelete()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">

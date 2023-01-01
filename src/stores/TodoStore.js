@@ -2,21 +2,25 @@ import { defineStore } from 'pinia';
 
 export const useTodoStore = defineStore('Todo', {
     state: () => ({
+        todo: {},
         todos: [
             {
                 id: 1,
                 title: 'Todo 1',
                 completed: true,
+                allowEdit: false,
             },
             {
                 id: 2,
                 title: 'Todo 2',
                 completed: false,
+                allowEdit: false,
             },
             {
                 id: 3,
                 title: 'Todo 3',
                 completed: false,
+                allowEdit: false,
             }
         ],
     }),
@@ -27,16 +31,37 @@ export const useTodoStore = defineStore('Todo', {
             this.todos.push(todo);
         },
         deleteTodo(id){
-            console.log("I'm clicked to delete");
            this.todos = this.todos.filter( todo => todo.id !== id);
         },
         toggleStatus(id){
             this.todos.map(todo => {
                 if(todo.id === id){
                     todo.completed = !todo.completed;
+                    if(todo.completed){
+                        todo.allowEdit = false;
+                    }
                 }
                 return todo;
-            })
+            });
+        },
+        editTodo(id){
+            const selectedTodo = this.todos.filter(todo => todo.id === id);
+            this.todos.map(todo => {
+                if(todo.id === id) {
+                    todo.allowEdit = true;
+                }
+                return todo;
+            });
+            this.todo = {...selectedTodo};
+        },
+        updateTodo(id, newTitle){
+            this.todos.map(todo => {
+                if(todo.id === id) {
+                    todo.title = newTitle;
+                    todo.allowEdit = false;
+                }
+                return todo;
+            });
         }
     },
 

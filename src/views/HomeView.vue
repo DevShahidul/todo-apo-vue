@@ -21,6 +21,7 @@ import { useTodoStore } from '../stores/TodoStore';
                     id: this.todos.length + 1,
                     title: `Todo ${this.todos.length + 1}`,
                     completed: false,
+                    allowEdit: false,
                 });
             }
         }
@@ -30,7 +31,7 @@ import { useTodoStore } from '../stores/TodoStore';
     <div class="container mx-auto max-w-5xl py-10">
         <div class="flex items-center justify-between">
             <h1 class="font-bold text-2xl">My todo app</h1>
-            <button @click="addTodo" class="bg-sky-500 text-white px-8 py-2 text-center">Add tood</button>
+            <button @click="addTodo()" class="bg-sky-500 text-white px-8 py-2 text-center">Add tood</button>
         </div>
         <ListGroup v-if="todos.length">
             <ListItem v-for="todo in todos" :key="todo.id" :todo="todo" />
