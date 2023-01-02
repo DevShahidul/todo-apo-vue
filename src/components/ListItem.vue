@@ -21,9 +21,11 @@
             handleEdit(){
                 useTodoStore().editTodo(this.todo.id);
             },
-            updateTodo(event){
-                event.preventDefault();
+            updateTodo(){
                 useTodoStore().updateTodo(this.todo.id, this.todoTitle);
+            },
+            handleBlure(){
+                useTodoStore().handleBlure(this.todo.id);
             }
         },
         computed: {
@@ -34,8 +36,8 @@
 <template>
     <li class="w-full p-4 ring-1 ring-gray-200 flex justify-between items-center hover:shadow-lg transition shadow-gray-800">
         <template v-if="todo.allowEdit">
-            <form @submit="(e) => updateTodo(e)">
-                <input class="ring-1 ring-text-gray-300 text-gray-500 placeholder:text-gray-400" type="text" name="todoTitle" v-model="todoTitle">
+            <form @submit.prevent="updateTodo()">
+                <input @blur="handleBlure()" class="ring-1 ring-text-gray-300 text-gray-500 placeholder:text-gray-400" type="text" name="todoTitle" v-model="todoTitle">
             </form>
         </template>
         <template v-else>

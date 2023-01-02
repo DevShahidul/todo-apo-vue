@@ -62,7 +62,15 @@ export const useTodoStore = defineStore('Todo', {
                 }
                 return todo;
             });
-        }
+        },
+        handleBlure(id){
+            this.todos.map( todo => {
+                if(todo.id === id) {
+                    todo.allowEdit = false;
+                }
+                return todo;
+            });
+        },
     },
 
     // Getters
