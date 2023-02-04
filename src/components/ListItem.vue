@@ -11,11 +11,6 @@
                 todoTitle: this.todo.title,
             }
         },
-        computed: {
-            inputRef: function() {
-                return this.showInput ? 'inputElement' : null;
-            },
-        },
         methods: {
             handleDelete(){
                 useTodoStore().deleteTodo(this.todo.id);
@@ -25,11 +20,9 @@
             },
             handleEdit(){
                 useTodoStore().editTodo(this.todo.id);
-                if (this.$refs[this.inputRef]) {
-                   this.$refs[this.inputRef].focus();
-                } else {
-                    console.log('Input is not rendered');
-                }
+                this.$nextTick(() => {
+                    this.$refs.inputElement.focus();
+                });
             },
             updateTodo(){
                 useTodoStore().updateTodo(this.todo.id, this.todoTitle);
